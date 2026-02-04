@@ -1,0 +1,6 @@
+@SistemaDeEmprestimo_HostAddress = http://localhost:5271
+
+GET {{SistemaDeEmprestimo_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
