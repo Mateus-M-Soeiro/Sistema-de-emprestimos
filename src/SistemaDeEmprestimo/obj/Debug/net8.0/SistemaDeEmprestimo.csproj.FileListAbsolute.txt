@@ -138,3 +138,4 @@ C:\Users\Mateu\Documents\projetos dotnet\portifolio\Sistema de empréstimo\Siste
 C:\Users\Mateu\Documents\projetos dotnet\portifolio\Sistema de empréstimo\Sistema-de-emprestimos\src\SistemaDeEmprestimo\obj\Debug\net8.0\SistemaDeEmprestimo.pdb
 C:\Users\Mateu\Documents\projetos dotnet\portifolio\Sistema de empréstimo\Sistema-de-emprestimos\src\SistemaDeEmprestimo\obj\Debug\net8.0\SistemaDeEmprestimo.genruntimeconfig.cache
 C:\Users\Mateu\Documents\projetos dotnet\portifolio\Sistema de empréstimo\Sistema-de-emprestimos\src\SistemaDeEmprestimo\obj\Debug\net8.0\ref\SistemaDeEmprestimo.dll
+C:\Users\Mateu\Documents\projetos dotnet\portifolio\Sistema de empréstimo\Sistema-de-emprestimos\src\SistemaDeEmprestimo\bin\Debug\net8.0\BCrypt.Net-Next.dll
