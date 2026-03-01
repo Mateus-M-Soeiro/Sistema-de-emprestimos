@@ -10,7 +10,11 @@ namespace SistemaDeEmprestimo.Dtos
     {
         public Guid Id { get; set; }
 
-        public decimal Valor { get; set; }
+        public decimal ValorOriginal { get; set; }
+        public decimal ValorPago { get; set; }
+
+        // public decimal ValorRestante { get; set; }
+        public decimal ValorRestante => ValorOriginal - ValorPago;
 
         public EnumStatusEmprestimo Status { get; set; }
 

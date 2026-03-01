@@ -22,7 +22,7 @@ namespace SistemaDeEmprestimo.Services
                 // return BadRequest("Credor e Devedor devem ser diferentes");// mudei de forbbiden para badrequest
                 throw new Exception("Credor e Devedor devem ser diferentes");
 
-            if(dto.Valor <= 0) 
+            if(dto.ValorOriginal <= 0) 
                 // return BadRequest("Valor precisa ser maior que zero");
                 throw new Exception("Valor precisa ser maior que zero");
 
@@ -43,11 +43,11 @@ namespace SistemaDeEmprestimo.Services
             var novoEmprestimo = new Emprestimo
             {
              
-              Valor = dto.Valor,
+              ValorOriginal = dto.ValorOriginal,
+              ValorPago = 0,
               Status = EnumStatusEmprestimo.Ativo,
               DataLimite = dto.DataLimite,
               CriadoEm = DateTime.UtcNow,
-
               UserCredorId = dto.UserCredorId,
               UserDevedorId = dto.UserDevedorId,
 
@@ -59,7 +59,9 @@ namespace SistemaDeEmprestimo.Services
             return new EmprestimoResponseDto
             {
                 Id = novoEmprestimo.Id,
-                Valor = novoEmprestimo.Valor,
+                ValorOriginal = novoEmprestimo.ValorOriginal,
+                ValorPago = novoEmprestimo.ValorPago,
+
                 Status = novoEmprestimo.Status,
                 DataLimite = novoEmprestimo.DataLimite,
                 UserCredorId = novoEmprestimo.UserCredorId,
@@ -88,13 +90,43 @@ namespace SistemaDeEmprestimo.Services
             return true;
         }
 
+        public async Task<EnumResultadoPagamento> RegistrarPagamento(Guid id,decimal valor)
+        {
+            
+            var Emprestimo = await _context.Emprestimos.FindAsync(id);
+
+            if(Emprestimo == null) return EnumResultadoPagamento.NaoEncontrado;
+            
+            var valorRestante = Emprestimo.ValorOriginal - Emprestimo.ValorPago;    
+
+            if(Emprestimo.Status == EnumStatusEmprestimo.Pago) return EnumResultadoPagamento.JaPago;
+
+            if(valor <= 0) return EnumResultadoPagamento.ValorInvalido;
+
+            if(valor > valorRestante) return EnumResultadoPagamento.ValorMaiorQueRestante;
+
+            Emprestimo.ValorPago += valor;
+
+            if(Emprestimo.ValorOriginal == Emprestimo.ValorPago){
+
+                Emprestimo.Status = EnumStatusEmprestimo.Pago;
+                Emprestimo.PagoEm = DateTime.UtcNow;
+            }
+
+            await _context.SaveChangesAsync();
+            return EnumResultadoPagamento.Sucesso;
+        }
+
         public async Task<EmprestimoResponseDto> ObterPorIdAsync(Guid id)
         {
             var Emprestimo = await _context.Emprestimos.FindAsync(id);
+            if(Emprestimo == null) return null;
             return new EmprestimoResponseDto
             {
                 Id = Emprestimo.Id,
-                Valor = Emprestimo.Valor,
+                ValorOriginal = Emprestimo.ValorOriginal,
+                ValorPago = Emprestimo.ValorPago,
+     
                 Status = Emprestimo.Status,
                 DataLimite = Emprestimo.DataLimite,
                 UserCredorId = Emprestimo.UserCredorId,
@@ -108,7 +140,9 @@ namespace SistemaDeEmprestimo.Services
             return await _context.Emprestimos
             .Select(Emprestimo => new EmprestimoResponseDto{
             Id = Emprestimo.Id,
-            Valor = Emprestimo.Valor,
+            ValorOriginal = Emprestimo.ValorOriginal,
+            ValorPago = Emprestimo.ValorPago,
+
             Status = Emprestimo.Status,
             DataLimite = Emprestimo.DataLimite,
             UserCredorId = Emprestimo.UserCredorId,

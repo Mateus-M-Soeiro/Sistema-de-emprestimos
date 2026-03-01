@@ -9,7 +9,7 @@ namespace SistemaDeEmprestimo.Dtos
     {
         
 
-        public decimal Valor { get; set; }
+        public decimal ValorOriginal { get; set; }
         public Guid UserCredorId { get; set; }
         public Guid UserDevedorId { get; set; }
 

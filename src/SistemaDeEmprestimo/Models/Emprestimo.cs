@@ -10,9 +10,9 @@ namespace SistemaDeEmprestimo.Models
     public class Emprestimo
     {
         public Guid Id { get; set; }
+        public decimal ValorOriginal { get; set; }
+        public decimal ValorPago { get; set; }
 
-        public decimal Valor { get; set; }
- 
         public EnumStatusEmprestimo Status { get; set; }
 
         public DateTime CriadoEm { get; set; }

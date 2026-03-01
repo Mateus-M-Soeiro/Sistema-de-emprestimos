@@ -15,7 +15,10 @@ namespace SistemaDeEmprestimo.Data
         {
             //define as casas decimais pro valor
             modelBuilder.Entity<Emprestimo>()
-            .Property(e => e.Valor)
+            .Property(e => e.ValorOriginal)
+            .HasPrecision(18,2);
+            modelBuilder.Entity<Emprestimo>()
+            .Property(e => e.ValorPago)
             .HasPrecision(18,2);
 
             //impede de apagar o user inteiro quando fizer um DELETE

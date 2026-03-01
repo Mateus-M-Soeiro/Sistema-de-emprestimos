@@ -18,7 +18,7 @@ namespace SistemaDeEmprestimo.Controllers
     {
         
         private readonly IEmprestimoService _service;
-        private readonly AppDbContext _context;
+        // private readonly AppDbContext _context;
         
         public EmprestimoController(IEmprestimoService service)
         {
@@ -64,8 +64,23 @@ namespace SistemaDeEmprestimo.Controllers
                 return NotFound();
             }
 
-            return Ok();
+            return NoContent();
         }
+        [HttpPut("{id}/registrar-pagamento")]
+        public async Task<IActionResult> RegistrarPagamento(Guid id, RegistrarPagamentoDto dto)
+        {
+            var resultado = await _service.RegistrarPagamento(id, dto.Valor);
+
+            return resultado switch
+            {
+                EnumResultadoPagamento.NaoEncontrado => NotFound(),
+                EnumResultadoPagamento.JaPago => BadRequest("Empréstimo já pago."),
+                EnumResultadoPagamento.ValorInvalido => BadRequest("Valor inválido."),
+                EnumResultadoPagamento.ValorMaiorQueRestante => BadRequest("Valor maior que o restante da dívida."),
+                _ => NoContent()
+            };
+        }
+
 
         [HttpGet("{id}")]
         public async Task<IActionResult> ObterPorId(Guid id)
